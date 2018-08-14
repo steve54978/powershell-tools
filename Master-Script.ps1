@@ -3,18 +3,17 @@ Author: Steve Hudgson
 
 Reason: Useful code snippets for Server Administration :)
 
-#-----------------------------TIPS------------------------------#
+#----------------------------TIPS------------------------------#
 
  1. Put your functions into .\SteveModules\SteveModules.psm1
 
-#-----------------------------List of Functions-----------------#>
+#------------------------List of Functions-----------------#>
 
 function Get-PSVersion-Steve {
     $PSVersionTable.PSVersion
 }
 
 #------------------------ScratchWork-----------------------------#
-# This is were the magic happens ;)
 
 Get-Verb | Sort-Object -Property verb | Out-GridView
 
@@ -24,7 +23,7 @@ Get-ChildItem -Path Function:\Get-*
 
 Get-ChildItem -Path Function:\Get-PSVersion-Steve | Remove-Item
 
-# Nagios Work
+#------------------------Nagios Work-----------------------------#
 Import-Module MrANagios
 
 $nagiosAdmin = Get-Credential
@@ -33,3 +32,32 @@ Invoke-NagiosRequest -computername txaupwvxar573 -action 29 -NagiosCoreUrl http:
 
 Get-NagiosXiHostStatus -HostName txaupwvxar551
 Invoke-NagiosRequest.ps1 -computername txaupwvxar573 -action 29 -NagiosCoreUrl http://nagios.uprd.usoncology.unx/nagiosxi/login.php -username nagiosadmin
+
+
+#---------------------AD work Code From Dan Daley-------------------#
+
+# import AD module
+Import-Module ActiveDirectory
+
+# Create secure credentials.
+$User = "USON\svc_SvrAdd"
+$PasswordFile = "/pstore.txt"
+$KeyFile = "pstore.key"
+$key = Get-Content $KeyFile
+$cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, (Get-Content $PasswordFile | ConvertTo-SecureString -Key $key)
+
+# Domain Join
+$domain = "uson.usoncology.int"
+Add-Computer -DomainName $domain -Credential $cred -OUPath "OU=Quarantined-New,OU=Servers,DC=uson,DC=usoncology,DC=int"
+#Restart-Computer
+
+# Edits
+$servername = "";
+$Destination_OU = "";
+
+$target = Get-ADOrganizationalUnit -LDAPFilter "(name=$Destination_OU)";
+get-adcomputer -Server $servername | Move-ADObject -TargetPath $target.DistinguishedName
+
+#-------------------------Editing ISO Automation---------------------------#
+
+

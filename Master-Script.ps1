@@ -40,8 +40,8 @@ Invoke-NagiosRequest.ps1 -computername txaupwvxar573 -action 29 -NagiosCoreUrl h
 Import-Module ActiveDirectory
 
 # Create secure credentials.
-$User = "USON\svc_SvrAdd"
-$PasswordFile = "/pstore.txt"
+$User = "***"
+$PasswordFile = "***"
 $KeyFile = "pstore.key"
 $key = Get-Content $KeyFile
 $cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, (Get-Content $PasswordFile | ConvertTo-SecureString -Key $key)

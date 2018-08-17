@@ -52,10 +52,10 @@ Add-Computer -DomainName $domain -Credential $cred -OUPath "OU=Quarantined-New,O
 #Restart-Computer
 
 # Edits
-$servername = "";
-$Destination_OU = "";
+$servername = "usawtwvpv001";
+$Destination_OU = "Steve Test";
 
-$target = Get-ADOrganizationalUnit -LDAPFilter "(name=$Destination_OU)";
+$target = Get-ADOrganizationalUnit -LDAPFilter "(name=Steve Test)";
 get-adcomputer -Server $servername | Move-ADObject -TargetPath $target.DistinguishedName
 
 #-------------------------Editing ISO Automation---------------------------#
